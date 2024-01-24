@@ -114,3 +114,9 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
 ### Installation
 
 ## ✨Usage
+
+Run the app using `poetry` with the following command:
+
+```bash
+poetry run python app/app.py
+```
