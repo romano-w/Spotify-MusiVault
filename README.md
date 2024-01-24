@@ -1,9 +1,10 @@
-# Spotify MusiVault🎵🎶🎛️🎼💾💽🗄️🗃️
+<h1 align="center">Spotify MusiVault🎵🎶🎛️🎼💾💽🗄️🗃️</h1>
 
-*✨ Coded with help from GPT4 ✨*
+<p align="center"><i>✨ Coded with help from GPT4 ✨</i></p>
 
-[Write description for the project]
+This project is a Spotify Data Sync and Backup Tool that allows users to authenticate and sync their Spotify music data, including liked songs, playlists, and metadata, using a Flask backend with Spotipy. Data is stored locally in an SQLite database and backed up to Google Drive for security. The tool features a React-based user interface for easy interaction and is containerized with Docker for straightforward deployment and maintenance. Hosted on GitHub, it offers a robust solution for users to manage and safeguard their Spotify data.
 
+> [!NOTE]
 > *Based on my prior attempt at this project: [Spotify Backup](https://github.com/romano-w/spotify_backup)*
 
 ---
