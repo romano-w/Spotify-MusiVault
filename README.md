@@ -22,6 +22,7 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
 6. **Cloud Backup**: Google Drive
 7. **Containerization**: Docker
 8. **Version Control**: GitHub
+9. **Package Manager**: Poetry
 
 ### Project Structure
 
