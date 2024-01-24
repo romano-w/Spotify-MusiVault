@@ -6,85 +6,106 @@
 
 > *Based on my prior attempt at this project: [Spotify Backup](https://github.com/romano-w/spotify_backup)*
 
-## GPT4 Generated Structure 
+## GPT4 Generated Project Guideline
 
-### Framework and Technology Stack
+Based on selected tools and preferences, here's a refined guideline for your Spotify data retrieval and storage project:
 
-1. **Backend (API Interaction and Data Processing):** Python
-   - **Flask or FastAPI:** For creating a simple server to handle authentication and data retrieval. Flask is more mature with extensive support and documentation. FastAPI is newer, but offers built-in support for async operations and automatic API documentation.
-   - **Requests or Spotipy Library:** For making API calls to Spotify. Spotipy is a lightweight Python library that simplifies the process of making Spotify API calls.
+### Required Tools
 
-2. **Frontend (User Interface):** JavaScript
-   - **React or Vue:** If you want a dynamic web interface to interact with your application. These frameworks are modern, widely used, and have large communities.
-   - **OAuth Package:** For handling Spotify authentication in a user-friendly manner.
-
-3. **Data Storage (Local and Cloud):**
-   - **SQLite or PostgreSQL:** For local storage. SQLite is simpler and doesn't require a separate server, suitable for smaller datasets. PostgreSQL is more robust and scalable for larger datasets.
-   - **Cloud Storage:** AWS S3 or Google Cloud Storage for storing backups of your data. They are reliable, scalable, and integrate well with various applications.
-
-4. **Cloud Computing (Optional):**
-   - If you plan to deploy this application, AWS EC2 or Google Cloud Compute Engine can host your application. They provide scalable computing resources.
-
-5. **Other Tools:**
-   - **Docker:** For containerizing your application, making it easy to deploy and run on any machine without worrying about dependencies.
-   - **GitHub for version control.**
-   - **CI/CD Pipeline (like GitHub Actions or Jenkins):** For automating your deployment process.
+1. **Backend**: Flask (Python)
+2. **API Communication**: Spotipy (fallback: Requests)
+3. **Frontend**: React (JavaScript)
+4. **Authentication**: OAuth
+5. **Local Database**: SQLite
+6. **Cloud Backup**: Google Drive
+7. **Containerization**: Docker
+8. **Version Control**: GitHub
 
 ### Project Structure
 
-1. **Authentication:**
-   - Implement OAuth 2.0 flow to authenticate with Spotify and access user data.
-   - Store access tokens securely (consider using environment variables or secure vaults).
+1. **Flask Backend**:
+   - Handles OAuth authentication with Spotify.
+   - Manages API requests to Spotify using Spotipy.
+   - Processes and stores retrieved data in SQLite.
 
-2. **Data Retrieval:**
-   - Use Spotify’s Web API to fetch data like liked songs, playlists, and associated metadata.
-   - Implement error handling and rate limiting considerations.
+2. **React Frontend**:
+   - User interface for initiating authentication and displaying sync status.
 
-3. **Data Processing:**
-   - Create models and schemas for the data you retrieve.
-   - Clean and process the data as required.
+3. **SQLite Database**:
+   - Local storage of user's Spotify data.
 
-4. **Data Storage:**
-   - Define schemas for your databases (SQLite/PostgreSQL).
-   - Regularly update the local database with new data from Spotify.
-   - Implement a backup mechanism to cloud storage.
+4. **Google Drive Integration**:
+   - Cloud backup for the SQLite database.
 
-5. **Frontend (if required):**
-   - Build a simple UI for user authentication and to display the status of data sync.
-   - Implement a secure way for users to log in.
+### Development Roadmap
 
-6. **Maintenance and Monitoring:**
-   - Set up logging and monitoring for your application.
-   - Regularly update dependencies and review the application for any security vulnerabilities.
+#### Phase 1: Setup and Initial Backend
 
-7. **Documentation:**
-   - Document the setup process, API endpoints (if any), and how to use the application.
+1. **Environment Setup**:
+   - Setup Python, Node.js, and necessary development tools.
+   - Initialize Flask app and React app in your GitHub repository.
 
-### Development Steps
+2. **Spotify Developer Registration**:
+   - Register your app with Spotify to obtain client ID and client secret.
 
-1. **Setup Spotify Developer Account:**
-   - Register your application with Spotify to get the necessary credentials.
+3. **Flask App for Authentication**:
+   - Implement OAuth flow in Flask to authenticate with Spotify.
+   - Test authentication flow to ensure it's working correctly.
 
-2. **Prototype:**
-   - Start by building a basic version that can authenticate and fetch some data.
-   - Gradually add features like fetching more data types, storing in a database, and adding a frontend.
+4. **Integrate Spotipy**:
+   - Use Spotipy to connect to Spotify API and test basic data retrieval (like fetching user profile).
 
-3. **Testing and Iteration:**
-   - Test each component separately and then as an integrated system.
-   - Iterate based on testing feedback and additional features you might want to add.
+#### Phase 2: Data Retrieval and Local Storage
 
-4. **Deployment:**
-   - Once everything works locally, containerize your application with Docker.
-   - Deploy it on a cloud platform if required.
+5. **Expand Data Retrieval**:
+   - Retrieve liked songs, playlists, datetimes, and metadata using Spotipy.
 
-5. **Maintenance:**
-   - Regularly maintain the code, update dependencies, and ensure the security of the application.
+6. **SQLite Integration**:
+   - Set up SQLite database.
+   - Define data models and schemas corresponding to the Spotify data.
+
+7. **Data Storage Logic**:
+   - Implement logic to store and update Spotify data in SQLite.
+   - Ensure proper data processing and error handling.
+
+8. **Local Testing**:
+   - Test the complete flow from authentication to data retrieval and storage.
+
+#### Phase 3: Frontend Development
+
+9. **React Setup**:
+   - Develop basic frontend using React.
+   - Implement UI for user login and initiating data sync.
+
+10. **Frontend-Backend Integration**:
+    - Connect React app with Flask backend.
+    - Test end-to-end flow with the frontend.
+
+#### Phase 4: Cloud Backup and Finalization
+
+11. **Google Drive Integration**:
+    - Implement functionality to back up SQLite database to Google Drive.
+    - Test backup and restore processes.
+
+12. **Containerization with Docker**:
+    - Create a Dockerfile for your application.
+    - Test running your application in a Docker container.
+
+13. **Final Testing and Refinement**:
+    - Conduct thorough testing of the entire application.
+    - Refine features and fix any bugs.
+
+14. **Documentation**:
+    - Document the setup process, usage instructions, and any important details about your application.
+
+#### Phase 5: Deployment (Optional)
+
+- If I decide to deploy this application publicly, consider setting up a cloud server (like AWS EC2) and deploying the Docker container there.
 
 ## ⚡ Quick Start
 
 ### Prerequisites
 
 ### Installation
-
 
 ## ✨Usage
