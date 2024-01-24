@@ -6,6 +6,7 @@
 
 > *Based on my prior attempt at this project: [Spotify Backup](https://github.com/romano-w/spotify_backup)*
 
+---
 ## GPT4 Generated Project Guideline
 
 Based on selected tools and preferences, here's a refined guideline for your Spotify data retrieval and storage project:
@@ -101,6 +102,8 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
 #### Phase 5: Deployment (Optional)
 
 - If I decide to deploy this application publicly, consider setting up a cloud server (like AWS EC2) and deploying the Docker container there.
+
+---
 
 ## ⚡ Quick Start
 
