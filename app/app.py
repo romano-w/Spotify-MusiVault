@@ -1,5 +1,7 @@
 import os
+import spotipy
 from dotenv import load_dotenv
+from spotipy.oauth2 import SpotifyOAuth
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, redirect, request, session, url_for
 
@@ -35,9 +37,13 @@ def login():
 
 @app.route('/authorize')
 def authorize():
-    token = spotify.authorize_access_token()
-    resp = spotify.get('me')
-    profile = resp.json()
+    token_info = spotify.authorize_access_token()
+    
+    # Creating a Spotipy client with the access token
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    # Using Spotipy to fetch user profile data
+    profile = sp.current_user()
     # Do something with the profile, e.g., store in session or database
     return 'Logged in as ' + profile['id']
 
