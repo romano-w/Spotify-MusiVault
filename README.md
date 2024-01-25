@@ -113,6 +113,10 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
 
 ### Installation
 
+- Create Spotify dev account
+- Set redirect URI
+- Put client id and client secret in .env file (gitignored)
+
 ## ✨Usage
 
 Run the app using `poetry` with the following command:
