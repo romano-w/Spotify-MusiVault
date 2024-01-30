@@ -62,6 +62,20 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
 
 5. **Expand Data Retrieval**:
    - Retrieve liked songs, playlists, datetimes, and metadata using Spotipy.
+   - Spotify API endpoints to use from the [documentation](https://developer.spotify.com/documentation/web-api):
+   - [ ] [Get Playlist](https://developer.spotify.com/documentation/web-api/reference/get-playlist) --> `/v1/playlists/{playlist_id}`
+   - [ ] [Get Playlist Items](https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks) --> `/v1/playlists/{playlist_id}/tracks`
+   - [ ] [Get User's Playlists](https://developer.spotify.com/documentation/web-api/reference/get-list-users-playlists) --> `/v1/users/{user_id}/playlists`
+   - [ ] [Get Playlist Cover Image](https://developer.spotify.com/documentation/web-api/reference/get-playlist-cover) --> `Get Playlist Cover Image`
+   - [ ] [Get Track](https://developer.spotify.com/documentation/web-api/reference/get-track) --> `/v1/tracks/{id}`
+   - [ ] [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/get-several-tracks) --> `/v1/tracks`
+   - [ ] [Get User's Saved Tracks](https://developer.spotify.com/documentation/web-api/reference/get-users-saved-tracks) --> `/v1/me/tracks`
+   - [ ] [Get Several Tracks' Audio Features](https://developer.spotify.com/documentation/web-api/reference/get-several-audio-features) --> `/v1/audio-features`
+   - [ ] [Get Track's Audio Features](https://developer.spotify.com/documentation/web-api/reference/get-audio-features) --> `/v1/audio-features/{id}`
+   - [ ] [Get Track's Audio Analysis](https://developer.spotify.com/documentation/web-api/reference/get-audio-analysis) --> `/v1/audio-analysis/{id}`
+   - [ ] [Get Current User's Profile](https://developer.spotify.com/documentation/web-api/reference/get-current-users-profile) --> `/v1/me`
+   - [ ] [Get User's Top Items](https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks) --> `/v1/me/top/{type}`
+   - [ ] [Get Followed Artists](https://developer.spotify.com/documentation/web-api/reference/get-followed) --> `/v1/me/following`
 
 6. **SQLite Integration**:
    - Set up SQLite database.
