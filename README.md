@@ -65,7 +65,7 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
    - Spotify API endpoints to use from the [documentation](https://developer.spotify.com/documentation/web-api):
    > - [ ] [Get Playlist](https://developer.spotify.com/documentation/web-api/reference/get-playlist) --> `/v1/playlists/{playlist_id}`
    > - [ ] [Get Playlist Items](https://developer.spotify.com/documentation/web-api/reference/get-playlists-tracks) --> `/v1/playlists/{playlist_id}/tracks`
-   > - [ ] [Get User's Playlists](https://developer.spotify.com/documentation/web-api/reference/get-list-users-playlists) --> `/v1/users/{user_id}/playlists`
+   > - [x] [Get User's Playlists](https://developer.spotify.com/documentation/web-api/reference/get-list-users-playlists) --> `/v1/users/{user_id}/playlists`
    > - [ ] [Get Playlist Cover Image](https://developer.spotify.com/documentation/web-api/reference/get-playlist-cover) --> `Get Playlist Cover Image`
    > - [ ] [Get Track](https://developer.spotify.com/documentation/web-api/reference/get-track) --> `/v1/tracks/{id}`
    > - [ ] [Get Several Tracks](https://developer.spotify.com/documentation/web-api/reference/get-several-tracks) --> `/v1/tracks`
