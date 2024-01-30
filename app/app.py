@@ -44,26 +44,37 @@ def login():
 @app.route('/authorize')
 def authorize():
     token_info = spotify.authorize_access_token()
-    
-    # Creating a Spotipy client with the access token
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    # Fetch and log the user's playlists
-    playlists = sp.current_user_playlists()
-    while playlists:
-        for i, playlist in enumerate(playlists['items']):
-            print(f"{i + playlists['offset']} - {playlist['name']}")
-        if playlists['next']:
-            playlists = sp.next(playlists)
-        else:
-            playlists = None
-    
-    # Example of using a function from spotify_utils
-    playlists = get_playlist_items(sp, 'some_playlist_id')
+    # Fetch and print all Spotify data
+    fetch_and_print_spotify_data(sp)
 
     profile = sp.current_user()
-    # Do something with the profile, e.g., store in session or database
     return 'Logged in as ' + profile['id']
+
+# @app.route('/authorize')
+# def authorize():
+#     token_info = spotify.authorize_access_token()
+    
+#     # Creating a Spotipy client with the access token
+#     sp = spotipy.Spotify(auth=token_info['access_token'])
+
+#     # Fetch and log the user's playlists
+#     playlists = sp.current_user_playlists()
+#     while playlists:
+#         for i, playlist in enumerate(playlists['items']):
+#             print(f"{i + playlists['offset']} - {playlist['name']}")
+#         if playlists['next']:
+#             playlists = sp.next(playlists)
+#         else:
+#             playlists = None
+    
+#     # Example of using a function from spotify_utils
+#     playlists = get_playlist_items(sp, 'some_playlist_id')
+
+#     profile = sp.current_user()
+#     # Do something with the profile, e.g., store in session or database
+#     return 'Logged in as ' + profile['id']
 
 @app.route('/user')
 def user():
@@ -150,6 +161,55 @@ def followed_artists():
 def create_spotify_client():
     token_info = spotify.authorize_access_token()
     return spotipy.Spotify(auth=token_info['access_token'])
+
+def fetch_and_print_spotify_data(sp):
+    # User Profile
+    user_info = get_user(sp)
+    print("User Info:", user_info)
+
+    # User's Playlists
+    playlists = get_user_playlists(sp)
+    print("\nUser's Playlists:")
+    for playlist in playlists:
+        print(playlist['name'])
+
+        # Playlist Details
+        playlist_detail = get_playlist(sp, playlist['id'])
+        print("  Detail:", playlist_detail)
+
+        # Playlist Items
+        playlist_items = get_playlist_items(sp, playlist['id'])
+        print("  Items:", playlist_items)
+
+        # Playlist Cover Image
+        cover_image = get_playlist_cover_image(sp, playlist['id'])
+        print("  Cover Image:", cover_image)
+
+    # User's Saved Tracks
+    saved_tracks = get_saved_tracks(sp)
+    print("\nSaved Tracks:", saved_tracks)
+
+    # User's Top Items (Tracks and Artists)
+    top_tracks = get_user_top_items(sp, 'tracks')
+    print("\nTop Tracks:", top_tracks)
+    top_artists = get_user_top_items(sp, 'artists')
+    print("\nTop Artists:", top_artists)
+
+    # Followed Artists
+    followed_artists = get_followed_artists(sp)
+    print("\nFollowed Artists:", followed_artists)
+
+    # Fetching track details, audio features, and audio analysis for a few tracks
+    # Assuming you have some track IDs
+    sample_track_ids = ['track_id1', 'track_id2']
+    tracks = get_several_tracks(sp, sample_track_ids)
+    print("\nTracks Details:", tracks)
+    for track_id in sample_track_ids:
+        track_audio_features = get_track_audio_features(sp, track_id)
+        print(f"\nAudio Features for {track_id}:", track_audio_features)
+        track_audio_analysis = get_track_audio_analysis(sp, track_id)
+        print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
