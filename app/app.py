@@ -8,7 +8,8 @@ from spotify_utils import (
     get_user, get_user_playlists, get_playlist, get_playlist_items,
     get_playlist_cover_image, get_track, get_several_tracks, get_saved_tracks,
     get_several_audio_features, get_track_audio_features,
-    get_track_audio_analysis, get_user_top_items, get_followed_artists
+    get_track_audio_analysis, get_user_top_items, get_followed_artists,
+    print_playlist_structure
 )
 
 # Load environment variables from .env file
@@ -166,6 +167,12 @@ def fetch_and_print_spotify_data(sp):
     # User Profile
     user_info = get_user(sp)
     print("User Info:", user_info)
+    # Prints: 
+    # User Info: {'display_name': 'mlgprettyboi', 'external_urls': 
+    # {'spotify': 'https://open.spotify.com/user/mlgprettyboi'}, 'href': 
+    # 'https://api.spotify.com/v1/users/mlgprettyboi', 'id': 'mlgprettyboi', 
+    # 'images': [], 'type': 'user', 'uri': 'spotify:user:mlgprettyboi', 
+    # 'followers': {'href': None, 'total': 3}}
 
     # User's Playlists
     playlists = get_user_playlists(sp)
@@ -175,41 +182,77 @@ def fetch_and_print_spotify_data(sp):
 
         # Playlist Details
         playlist_detail = get_playlist(sp, playlist['id'])
-        print("  Detail:", playlist_detail)
+        print("  Detail:")
+        print_playlist_structure(playlist_detail)
 
-        # Playlist Items
-        playlist_items = get_playlist_items(sp, playlist['id'])
-        print("  Items:", playlist_items)
+        # Playlist structure:
+        # collaborative: <class 'bool'>
+        # description: <class 'str'>
+        # external_urls: <class 'dict'>
+        #     spotify: <class 'str'>
+        # followers: <class 'dict'>
+        #     href: <class 'NoneType'>
+        #     total: <class 'int'>
+        # href: <class 'str'>
+        # id: <class 'str'>
+        # images: <class 'list'>
+        # name: <class 'str'>
+        # owner: <class 'dict'>
+        #     display_name: <class 'str'>
+        #     external_urls: <class 'dict'>
+        #     spotify: <class 'str'>
+        #     href: <class 'str'>
+        #     id: <class 'str'>
+        #     type: <class 'str'>
+        #     uri: <class 'str'>
+        # primary_color: <class 'NoneType'>
+        # public: <class 'bool'>
+        # snapshot_id: <class 'str'>
+        # tracks: <class 'dict'>
+        #     href: <class 'str'>
+        #     items: <class 'list'>
+        #     limit: <class 'int'>
+        #     next: <class 'str'>
+        #     offset: <class 'int'>
+        #     previous: <class 'NoneType'>
+        #     total: <class 'int'>
+        # type: <class 'str'>
+        # uri: <class 'str'>
 
-        # Playlist Cover Image
-        cover_image = get_playlist_cover_image(sp, playlist['id'])
-        print("  Cover Image:", cover_image)
+        # print("  Detail:", playlist_detail)
 
-    # User's Saved Tracks
-    saved_tracks = get_saved_tracks(sp)
-    print("\nSaved Tracks:", saved_tracks)
+    #     # Playlist Items
+    #     playlist_items = get_playlist_items(sp, playlist['id'])
+    #     print("  Items:", playlist_items)
 
-    # User's Top Items (Tracks and Artists)
-    top_tracks = get_user_top_items(sp, 'tracks')
-    print("\nTop Tracks:", top_tracks)
-    top_artists = get_user_top_items(sp, 'artists')
-    print("\nTop Artists:", top_artists)
+    #     # Playlist Cover Image
+    #     cover_image = get_playlist_cover_image(sp, playlist['id'])
+    #     print("  Cover Image:", cover_image)
 
-    # Followed Artists
-    followed_artists = get_followed_artists(sp)
-    print("\nFollowed Artists:", followed_artists)
+    # # User's Saved Tracks
+    # saved_tracks = get_saved_tracks(sp)
+    # print("\nSaved Tracks:", saved_tracks)
 
-    # Fetching track details, audio features, and audio analysis for a few tracks
-    # Assuming you have some track IDs
-    sample_track_ids = ['track_id1', 'track_id2']
-    tracks = get_several_tracks(sp, sample_track_ids)
-    print("\nTracks Details:", tracks)
-    for track_id in sample_track_ids:
-        track_audio_features = get_track_audio_features(sp, track_id)
-        print(f"\nAudio Features for {track_id}:", track_audio_features)
-        track_audio_analysis = get_track_audio_analysis(sp, track_id)
-        print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
+    # # User's Top Items (Tracks and Artists)
+    # top_tracks = get_user_top_items(sp, 'tracks')
+    # print("\nTop Tracks:", top_tracks)
+    # top_artists = get_user_top_items(sp, 'artists')
+    # print("\nTop Artists:", top_artists)
 
+    # # Followed Artists
+    # followed_artists = get_followed_artists(sp)
+    # print("\nFollowed Artists:", followed_artists)
+
+    # # Fetching track details, audio features, and audio analysis for a few tracks
+    # # Assuming you have some track IDs
+    # sample_track_ids = ['track_id1', 'track_id2']
+    # tracks = get_several_tracks(sp, sample_track_ids)
+    # print("\nTracks Details:", tracks)
+    # for track_id in sample_track_ids:
+    #     track_audio_features = get_track_audio_features(sp, track_id)
+    #     print(f"\nAudio Features for {track_id}:", track_audio_features)
+    #     track_audio_analysis = get_track_audio_analysis(sp, track_id)
+    #     print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
 
 if __name__ == '__main__':
     app.run(debug=True)

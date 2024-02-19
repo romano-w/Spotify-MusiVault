@@ -77,6 +77,43 @@ Based on selected tools and preferences, here's a refined guideline for your Spo
    > - [ ] [Get User's Top Items](https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks) --> `/v1/me/top/{type}`
    > - [ ] [Get Followed Artists](https://developer.spotify.com/documentation/web-api/reference/get-followed) --> `/v1/me/following`
 
+**Retrieved playlist structure:**
+
+```python
+collaborative: <class 'bool'>
+description: <class 'str'>
+external_urls: <class 'dict'>
+    spotify: <class 'str'>
+followers: <class 'dict'>
+    href: <class 'NoneType'>
+    total: <class 'int'>
+href: <class 'str'>
+id: <class 'str'>
+images: <class 'list'>
+name: <class 'str'>
+owner: <class 'dict'>
+    display_name: <class 'str'>
+    external_urls: <class 'dict'>
+    spotify: <class 'str'>
+    href: <class 'str'>
+    id: <class 'str'>
+    type: <class 'str'>
+    uri: <class 'str'>
+primary_color: <class 'NoneType'>
+public: <class 'bool'>
+snapshot_id: <class 'str'>
+tracks: <class 'dict'>
+    href: <class 'str'>
+    items: <class 'list'>
+    limit: <class 'int'>
+    next: <class 'str'>
+    offset: <class 'int'>
+    previous: <class 'NoneType'>
+    total: <class 'int'>
+type: <class 'str'>
+uri: <class 'str'>
+```
+
 6. **SQLite Integration**:
    - Set up SQLite database.
    - Define data models and schemas corresponding to the Spotify data.

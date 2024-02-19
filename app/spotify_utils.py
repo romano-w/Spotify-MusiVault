@@ -168,3 +168,9 @@ def get_followed_artists(sp):
         object: The list of followed artists.
     """
     return sp.current_user_followed_artists()
+
+def print_playlist_structure(data, indent=2):
+    for key, value in data.items():
+        print(" " * indent + f"{key}: {type(value)}")
+        if isinstance(value, dict):
+            print_playlist_structure(value, indent + 2)
