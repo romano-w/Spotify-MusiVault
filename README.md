@@ -114,15 +114,110 @@ type: <class 'str'>
 uri: <class 'str'>
 ```
 
-6. **SQLite Integration**:
+**Retrieved playlist items structure:**
+
+```python
+added_at: <class 'str'>
+added_by: <class 'dict'>
+  external_urls: <class 'dict'>
+    spotify: <class 'str'>
+  href: <class 'str'>
+  id: <class 'str'>
+  type: <class 'str'>
+  uri: <class 'str'>
+is_local: <class 'bool'>
+primary_color: <class 'NoneType'>
+track: <class 'dict'>
+  preview_url: <class 'str'>
+  available_markets: <class 'list'>
+  explicit: <class 'bool'>
+  type: <class 'str'>
+  episode: <class 'bool'>
+  track: <class 'bool'>
+  album: <class 'dict'>
+    available_markets: <class 'list'>
+    type: <class 'str'>
+    album_type: <class 'str'>
+    href: <class 'str'>
+    id: <class 'str'>
+    images: <class 'list'>
+      height: <class 'int'>
+      url: <class 'str'>
+      width: <class 'int'>
+      height: <class 'int'>
+      url: <class 'str'>
+      width: <class 'int'>
+      height: <class 'int'>
+      url: <class 'str'>
+      width: <class 'int'>
+    name: <class 'str'>
+    release_date: <class 'str'>
+    release_date_precision: <class 'str'>
+    uri: <class 'str'>
+    artists: <class 'list'>
+      external_urls: <class 'dict'>
+        spotify: <class 'str'>
+      href: <class 'str'>
+      id: <class 'str'>
+      name: <class 'str'>
+      type: <class 'str'>
+      uri: <class 'str'>
+    external_urls: <class 'dict'>
+      spotify: <class 'str'>
+    total_tracks: <class 'int'>
+  artists: <class 'list'>
+    external_urls: <class 'dict'>
+      spotify: <class 'str'>
+    href: <class 'str'>
+    id: <class 'str'>
+    name: <class 'str'>
+    type: <class 'str'>
+    uri: <class 'str'>
+  disc_number: <class 'int'>
+  track_number: <class 'int'>
+  duration_ms: <class 'int'>
+  external_ids: <class 'dict'>
+    isrc: <class 'str'>
+  external_urls: <class 'dict'>
+    spotify: <class 'str'>
+  href: <class 'str'>
+  id: <class 'str'>
+  name: <class 'str'>
+  popularity: <class 'int'>
+  uri: <class 'str'>
+  is_local: <class 'bool'>
+video_thumbnail: <class 'dict'>
+  url: <class 'NoneType'>
+↳ repeated for each song
+```
+
+**Cover image structure:**
+
+```python
+Cover Image Structure:
+<class 'dict'>
+  height: <class 'int'>
+  url: <class 'str'>
+  width: <class 'int'>
+<class 'dict'>
+  height: <class 'int'>
+  url: <class 'str'>
+  width: <class 'int'>
+<class 'dict'>
+  height: <class 'int'>
+  url: <class 'str'>
+  width: <class 'int'>
+  ```
+
+1. **SQLite Integration**:
    - Set up SQLite database.
    - Define data models and schemas corresponding to the Spotify data.
 
-7. **Data Storage Logic**:
+2. **Data Storage Logic**:
    - Implement logic to store and update Spotify data in SQLite.
    - Ensure proper data processing and error handling.
 
-8. **Local Testing**:
+3. **Local Testing**:
    - Test the complete flow from authentication to data retrieval and storage.
 
 #### Phase 3: Frontend Development

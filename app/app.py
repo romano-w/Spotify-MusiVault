@@ -4,12 +4,14 @@ from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, redirect, request, session, url_for
-from spotify_utils import (
+from spotify_api_services import (
     get_user, get_user_playlists, get_playlist, get_playlist_items,
     get_playlist_cover_image, get_track, get_several_tracks, get_saved_tracks,
     get_several_audio_features, get_track_audio_features,
     get_track_audio_analysis, get_user_top_items, get_followed_artists,
-    print_playlist_structure
+)
+from spotify_utils import (
+    print_playlist_structure, print_playlist_items_structure, print_cover_image_structure
 )
 
 # Load environment variables from .env file
@@ -174,64 +176,37 @@ def fetch_and_print_spotify_data(sp):
     # 'images': [], 'type': 'user', 'uri': 'spotify:user:mlgprettyboi', 
     # 'followers': {'href': None, 'total': 3}}
 
-    # User's Playlists
-    playlists = get_user_playlists(sp)
-    print("\nUser's Playlists:")
-    for playlist in playlists:
-        print(playlist['name'])
+    # # User's Playlists
+    # playlists = get_user_playlists(sp)
+    # print("\nUser's Playlists:")
+    # for playlist in playlists:
+    #     print(playlist['name'])
 
-        # Playlist Details
-        playlist_detail = get_playlist(sp, playlist['id'])
-        print("  Detail:")
-        print_playlist_structure(playlist_detail)
-
-        # Playlist structure:
-        # collaborative: <class 'bool'>
-        # description: <class 'str'>
-        # external_urls: <class 'dict'>
-        #     spotify: <class 'str'>
-        # followers: <class 'dict'>
-        #     href: <class 'NoneType'>
-        #     total: <class 'int'>
-        # href: <class 'str'>
-        # id: <class 'str'>
-        # images: <class 'list'>
-        # name: <class 'str'>
-        # owner: <class 'dict'>
-        #     display_name: <class 'str'>
-        #     external_urls: <class 'dict'>
-        #     spotify: <class 'str'>
-        #     href: <class 'str'>
-        #     id: <class 'str'>
-        #     type: <class 'str'>
-        #     uri: <class 'str'>
-        # primary_color: <class 'NoneType'>
-        # public: <class 'bool'>
-        # snapshot_id: <class 'str'>
-        # tracks: <class 'dict'>
-        #     href: <class 'str'>
-        #     items: <class 'list'>
-        #     limit: <class 'int'>
-        #     next: <class 'str'>
-        #     offset: <class 'int'>
-        #     previous: <class 'NoneType'>
-        #     total: <class 'int'>
-        # type: <class 'str'>
-        # uri: <class 'str'>
+        # # Playlist Details
+        # playlist_detail = get_playlist(sp, playlist['id'])
+        # print("  Detail:")
+        # print_playlist_structure(playlist_detail)
 
         # print("  Detail:", playlist_detail)
 
-    #     # Playlist Items
-    #     playlist_items = get_playlist_items(sp, playlist['id'])
-    #     print("  Items:", playlist_items)
+        # # Playlist Items
+        # playlist_items = get_playlist_items(sp, playlist['id'])
+        # print("  Items:", playlist_items)
 
-    #     # Playlist Cover Image
-    #     cover_image = get_playlist_cover_image(sp, playlist['id'])
-    #     print("  Cover Image:", cover_image)
+        # # Open a file in write mode
+        # with open('playlist_items_structure.txt', 'w') as f:
+        #     # Call the function with the file parameter
+        #     print_playlist_items_structure(playlist_items, file=f)
 
-    # # User's Saved Tracks
-    # saved_tracks = get_saved_tracks(sp)
-    # print("\nSaved Tracks:", saved_tracks)
+        # # Playlist Cover Image
+        # cover_image = get_playlist_cover_image(sp, playlist['id'])
+        # print_cover_image_structure(cover_image)
+        # # print("  Cover Image:", cover_image)
+
+    # User's Saved Tracks
+    saved_tracks = get_saved_tracks(sp)
+    print(type("\nSaved Tracks: {saved_tracks}"))
+    print(saved_tracks)
 
     # # User's Top Items (Tracks and Artists)
     # top_tracks = get_user_top_items(sp, 'tracks')
