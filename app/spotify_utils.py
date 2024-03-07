@@ -22,3 +22,12 @@ def print_cover_image_structure(cover_image):
             print(f"  {key}: {type(value)}")
     #     print(type(item).__name__)
     #     print(f"  {item}: {type(item).__name__}")
+
+def print_structure(data, indent=0):
+    if isinstance(data, dict):
+        for key, value in data.items():
+            print('  ' * indent + str(key) + ':', type(value))
+            print_structure(value, indent + 1)
+    elif isinstance(data, list) and data and isinstance(data[0], dict):
+        for item in data:
+            print_structure(item, indent + 1)

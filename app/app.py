@@ -11,7 +11,7 @@ from spotify_api_services import (
     get_track_audio_analysis, get_user_top_items, get_followed_artists,
 )
 from spotify_utils import (
-    print_playlist_structure, print_playlist_items_structure, print_cover_image_structure
+    print_playlist_structure, print_playlist_items_structure, print_cover_image_structure, print_structure
 )
 
 # Load environment variables from .env file
@@ -203,14 +203,15 @@ def fetch_and_print_spotify_data(sp):
         # print_cover_image_structure(cover_image)
         # # print("  Cover Image:", cover_image)
 
-    # User's Saved Tracks
-    saved_tracks = get_saved_tracks(sp)
-    print(type("\nSaved Tracks: {saved_tracks}"))
-    print(saved_tracks)
+    # # User's Saved Tracks
+    # saved_tracks = get_saved_tracks(sp)
+    # print(type("\nSaved Tracks: {saved_tracks}"))
+    # print(saved_tracks)
 
-    # # User's Top Items (Tracks and Artists)
-    # top_tracks = get_user_top_items(sp, 'tracks')
+    # User's Top Items (Tracks and Artists)
+    top_tracks = get_user_top_items(sp, 'tracks')
     # print("\nTop Tracks:", top_tracks)
+    print_structure(top_tracks)
     # top_artists = get_user_top_items(sp, 'artists')
     # print("\nTop Artists:", top_artists)
 

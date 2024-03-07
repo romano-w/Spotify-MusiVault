@@ -194,7 +194,6 @@ video_thumbnail: <class 'dict'>
 **Cover image structure:**
 
 ```python
-Cover Image Structure:
 <class 'dict'>
   height: <class 'int'>
   url: <class 'str'>
