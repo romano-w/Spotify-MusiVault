@@ -270,3 +270,7 @@ Run the app using `poetry` with the following command:
 ```bash
 poetry run python app/app.py
 ```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
