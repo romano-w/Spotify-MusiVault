@@ -258,13 +258,30 @@ video_thumbnail: <class 'dict'>
 ## ⚡ Quick Start
 
 ### Prerequisites
+1. Create a [Spotify Developer account](https://developer.spotify.com/).
+2. Set a Redirect URI in your Spotify app settings. A common local value is `http://localhost:5000/authorize`.
+3. Copy your **Client ID** and **Client Secret** and place them in a `.env` file in the project root (the file is already listed in `.gitignore`).
+
+Example `.env` file:
+
+```bash
+SPOTIFY_CLIENT_ID=your_client_id_here
+SPOTIFY_CLIENT_SECRET=your_client_secret_here
+APP_SECRET_KEY=choose_a_random_secret
+```
 
 ### Installation
+Use [Poetry](https://python-poetry.org/) to install dependencies and manage the virtual environment:
 
-> Add these steps:
-> - Create Spotify dev account
-> - Set redirect URI
-> - Put client id and client secret in .env file (gitignored)
+```bash
+poetry install
+```
+
+After installation, activate the shell with:
+
+```bash
+poetry shell
+```
 
 ## ✨Usage
 
