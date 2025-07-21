@@ -1,9 +1,8 @@
 import os
 import spotipy
 from dotenv import load_dotenv
-from spotipy.oauth2 import SpotifyOAuth
 from authlib.integrations.flask_client import OAuth
-from flask import Flask, redirect, request, session, url_for
+from flask import Flask, redirect, request, url_for
 from spotify_api_services import (
     get_user, get_user_playlists, get_playlist, get_playlist_items,
     get_playlist_cover_image, get_track, get_several_tracks, get_saved_tracks,
