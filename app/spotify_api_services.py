@@ -156,7 +156,6 @@ def get_user_top_items(sp, type='tracks'):
     """
     return sp.current_user_top_tracks() if type == 'tracks' else sp.current_user_top_artists()
 
-@with_pagination
 def get_followed_artists(sp):
     """
     Retrieves the list of artists that the current user is following on Spotify.
@@ -165,6 +164,11 @@ def get_followed_artists(sp):
         sp (object): The Spotify API object.
 
     Returns:
-        object: The list of followed artists.
+        list: The list of followed artists.
     """
-    return sp.current_user_followed_artists()
+    artists = []
+    results = sp.current_user_followed_artists()
+    while results:
+        artists.extend(results["artists"]["items"])
+        results = sp.next(results["artists"]) if results["artists"]["next"] else None
+    return artists
