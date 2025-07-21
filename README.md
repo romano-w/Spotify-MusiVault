@@ -2,6 +2,9 @@
 
 <p align="center"><i>✨ Coded with help from GPT4 ✨</i></p>
 
+> [!CAUTION]
+> This project includes AI-generated code. Review all outputs carefully to ensure accuracy.
+
 This project is a Spotify Data Sync and Backup Tool that allows users to authenticate and sync their Spotify music data, including liked songs, playlists, and metadata, using a Flask backend with Spotipy. Data is stored locally in an SQLite database and backed up to Google Drive for security. The tool features a React-based user interface for easy interaction and is containerized with Docker for straightforward deployment and maintenance. Hosted on GitHub, it offers a robust solution for users to manage and safeguard their Spotify data.
 
 > [!NOTE]
