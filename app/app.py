@@ -12,11 +12,21 @@ from spotify_api_services import (
 from spotify_utils import (
     print_playlist_structure, print_playlist_items_structure, print_cover_image_structure, print_structure
 )
+from database import init_database, db_session
+from models import User
+from data_access import SpotifyDataAccess
 
 # Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
+
+# Initialize database on startup
+try:
+    init_database()
+    print("Database ready!")
+except Exception as e:
+    print(f"Database initialization warning: {e}")
 
 # Use the secret key from the .env file
 app.secret_key = os.getenv('APP_SECRET_KEY')
@@ -228,6 +238,39 @@ def fetch_and_print_spotify_data(sp):
     #     print(f"\nAudio Features for {track_id}:", track_audio_features)
     #     track_audio_analysis = get_track_audio_analysis(sp, track_id)
     #     print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
+
+@app.route('/db-test')
+def test_database():
+    """Test database connectivity and basic operations."""
+    try:
+        with db_session() as session:
+            # Try to query users table
+            user_count = session.query(User).count()
+            return {
+                'status': 'success',
+                'message': 'Database connection successful',
+                'user_count': user_count
+            }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': f'Database error: {str(e)}'
+        }, 500
+
+@app.route('/db-stats')
+def database_stats():
+    """Get database statistics."""
+    try:
+        stats = SpotifyDataAccess.get_database_stats()
+        return {
+            'status': 'success',
+            'stats': stats
+        }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'message': f'Error retrieving stats: {str(e)}'
+        }, 500
 
 if __name__ == '__main__':
     app.run(debug=True)
