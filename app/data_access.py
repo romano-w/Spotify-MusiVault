@@ -7,12 +7,12 @@ import json
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from models import (
+from .models import (
     User, Artist, Album, Track, Playlist, AudioFeatures, AudioAnalysis,
     SavedTrack, UserTopTrack, UserTopArtist,
     playlist_track_association, track_artist_association, album_artist_association
 )
-from database import db_session
+from .database import db_session
 
 class SpotifyDataAccess:
     """Data access operations for Spotify entities."""

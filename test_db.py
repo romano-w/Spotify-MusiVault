@@ -5,15 +5,15 @@ Simple test to create database and check models
 import sys
 import os
 
-# Add paths
+# Ensure the project root is on the Python path for package imports
 project_root = os.path.dirname(__file__)
-app_dir = os.path.join(project_root, 'app')
-sys.path.insert(0, app_dir)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 print("Starting database test...")
 
 try:
-    from models import Base, User, Artist, Album, Track
+    from app.models import Base, User, Artist, Album, Track
     print("✓ Models imported successfully")
     
     from sqlalchemy import create_engine
