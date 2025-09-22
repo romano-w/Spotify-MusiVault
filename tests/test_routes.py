@@ -1,7 +1,6 @@
-import os
-from importlib import reload
-
 import pytest
+
+from app import create_app
 
 
 @pytest.fixture
@@ -9,10 +8,11 @@ def client(monkeypatch):
     monkeypatch.setenv('SPOTIFY_CLIENT_ID', 'dummy')
     monkeypatch.setenv('SPOTIFY_CLIENT_SECRET', 'dummy')
     monkeypatch.setenv('APP_SECRET_KEY', 'testing-secret')
-    import app.app as app_module
-    reload(app_module)
-    app_module.app.config['TESTING'] = True
-    with app_module.app.test_client() as client:
+
+    app = create_app()
+    app.config['TESTING'] = True
+
+    with app.test_client() as client:
         yield client
 
 
