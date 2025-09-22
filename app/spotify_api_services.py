@@ -143,18 +143,23 @@ def get_track_audio_analysis(sp, track_id):
     """
     return sp.audio_analysis(track_id)
 
-def get_user_top_items(sp, type='tracks'):
+def get_user_top_items(sp, type='tracks', time_range: str = 'medium_term', limit: int = 50):
     """
     Get the current user's top tracks or top artists.
 
     Parameters:
     - sp: Spotify client object
     - type: Type of items to retrieve ('tracks' or 'artists')
+    - time_range: 'short_term' | 'medium_term' | 'long_term'
+    - limit: number of items (1-50)
 
     Returns:
     - List of top tracks or top artists
     """
-    return sp.current_user_top_tracks() if type == 'tracks' else sp.current_user_top_artists()
+    if type == 'tracks':
+        return sp.current_user_top_tracks(time_range=time_range, limit=limit)
+    else:
+        return sp.current_user_top_artists(time_range=time_range, limit=limit)
 
 def get_followed_artists(sp):
     """

@@ -14,7 +14,8 @@ from spotify_utils import (
 )
 from database import init_database, db_session
 from models import User
-from data_access import SpotifyDataAccess
+from data_access import SpotifyDataStorage
+from data_collector import SpotifyDataCollector
 
 # Load environment variables from .env file
 load_dotenv()
@@ -58,11 +59,35 @@ def authorize():
     token_info = spotify.authorize_access_token()
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    # Fetch and print all Spotify data
-    fetch_and_print_spotify_data(sp)
-
-    profile = sp.current_user()
-    return 'Logged in as ' + profile['id']
+    # Use the new comprehensive data collection system
+    collector = SpotifyDataCollector(sp)
+    collection_result = collector.collect_all_user_data()
+    
+    if collection_result['success']:
+        profile = sp.current_user()
+        return f'''
+        <h1>Data Collection Complete!</h1>
+        <p>Successfully collected and stored Spotify data for: <strong>{profile['id']}</strong></p>
+        <h3>Collection Summary:</h3>
+        <ul>
+            <li>Users: {collection_result['database_stats']['users']}</li>
+            <li>Artists: {collection_result['database_stats']['artists']}</li>
+            <li>Albums: {collection_result['database_stats']['albums']}</li>
+            <li>Tracks: {collection_result['database_stats']['tracks']}</li>
+            <li>Playlists: {collection_result['database_stats']['playlists']}</li>
+            <li>Saved Tracks: {collection_result['database_stats']['saved_tracks']}</li>
+            <li>Audio Features: {collection_result['database_stats']['audio_features']}</li>
+        </ul>
+        <p>Collection time: {collection_result['elapsed_time']:.2f} seconds</p>
+        <p>Errors encountered: {collection_result['total_errors']}</p>
+        <p><a href="/db-stats">View detailed database statistics</a></p>
+        '''
+    else:
+        return f'''
+        <h1>Data Collection Failed</h1>
+        <p>Error: {collection_result.get('error', 'Unknown error')}</p>
+        <p><a href="/login">Try again</a></p>
+        '''
 
 # @app.route('/authorize')
 # def authorize():
@@ -175,69 +200,31 @@ def create_spotify_client():
     return spotipy.Spotify(auth=token_info['access_token'])
 
 def fetch_and_print_spotify_data(sp):
-    # User Profile
-    user_info = get_user(sp)
-    print("User Info:", user_info)
-    # Prints: 
-    # User Info: {'display_name': 'mlgprettyboi', 'external_urls': 
-    # {'spotify': 'https://open.spotify.com/user/mlgprettyboi'}, 'href': 
-    # 'https://api.spotify.com/v1/users/mlgprettyboi', 'id': 'mlgprettyboi', 
-    # 'images': [], 'type': 'user', 'uri': 'spotify:user:mlgprettyboi', 
-    # 'followers': {'href': None, 'total': 3}}
+    """
+    Legacy function - now replaced by SpotifyDataCollector.
+    Kept for reference but no longer used in the main flow.
+    """
+    # This function has been replaced by the comprehensive SpotifyDataCollector
+    print("ℹ️  This function has been replaced by SpotifyDataCollector")
+    print("   All data collection now uses the database storage system")
 
-    # # User's Playlists
-    # playlists = get_user_playlists(sp)
-    # print("\nUser's Playlists:")
-    # for playlist in playlists:
-    #     print(playlist['name'])
-
-        # # Playlist Details
-        # playlist_detail = get_playlist(sp, playlist['id'])
-        # print("  Detail:")
-        # print_playlist_structure(playlist_detail)
-
-        # print("  Detail:", playlist_detail)
-
-        # # Playlist Items
-        # playlist_items = get_playlist_items(sp, playlist['id'])
-        # print("  Items:", playlist_items)
-
-        # # Open a file in write mode
-        # with open('playlist_items_structure.txt', 'w') as f:
-        #     # Call the function with the file parameter
-        #     print_playlist_items_structure(playlist_items, file=f)
-
-        # # Playlist Cover Image
-        # cover_image = get_playlist_cover_image(sp, playlist['id'])
-        # print_cover_image_structure(cover_image)
-        # # print("  Cover Image:", cover_image)
-
-    # # User's Saved Tracks
-    # saved_tracks = get_saved_tracks(sp)
-    # print(type("\nSaved Tracks: {saved_tracks}"))
-    # print(saved_tracks)
-
-    # User's Top Items (Tracks and Artists)
-    top_tracks = get_user_top_items(sp, 'tracks')
-    # print("\nTop Tracks:", top_tracks)
-    print_structure(top_tracks)
-    # top_artists = get_user_top_items(sp, 'artists')
-    # print("\nTop Artists:", top_artists)
-
-    # # Followed Artists
-    # followed_artists = get_followed_artists(sp)
-    # print("\nFollowed Artists:", followed_artists)
-
-    # # Fetching track details, audio features, and audio analysis for a few tracks
-    # # Assuming you have some track IDs
-    # sample_track_ids = ['track_id1', 'track_id2']
-    # tracks = get_several_tracks(sp, sample_track_ids)
-    # print("\nTracks Details:", tracks)
-    # for track_id in sample_track_ids:
-    #     track_audio_features = get_track_audio_features(sp, track_id)
-    #     print(f"\nAudio Features for {track_id}:", track_audio_features)
-    #     track_audio_analysis = get_track_audio_analysis(sp, track_id)
-    #     print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
+@app.route('/collect-data')
+def collect_data_manually():
+    """Manual data collection endpoint for testing."""
+    try:
+        # This would require a valid token - for now just return info
+        return '''
+        <h1>Manual Data Collection</h1>
+        <p>To collect data manually, use the main authorization flow:</p>
+        <ol>
+            <li><a href="/login">Login with Spotify</a></li>
+            <li>The authorization process will automatically collect and store your data</li>
+            <li><a href="/db-stats">View collected data statistics</a></li>
+        </ol>
+        <p><strong>Note:</strong> Data collection now uses the comprehensive SpotifyDataCollector system with database storage.</p>
+        '''
+    except Exception as e:
+        return f'Error: {str(e)}', 500
 
 @app.route('/db-test')
 def test_database():
@@ -261,7 +248,7 @@ def test_database():
 def database_stats():
     """Get database statistics."""
     try:
-        stats = SpotifyDataAccess.get_database_stats()
+        stats = SpotifyDataStorage.get_database_stats()
         return {
             'status': 'success',
             'stats': stats

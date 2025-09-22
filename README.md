@@ -291,6 +291,22 @@ Run the app using `poetry` with the following command:
 poetry run python app/app.py
 ```
 
+Optional: Enable audio analysis collection (heavier and slower):
+
+```bash
+# Set this before running the app
+set ENABLE_AUDIO_ANALYSIS=true
+# Optional tuning
+set AUDIO_ANALYSIS_LIMIT=150
+set AUDIO_ANALYSIS_SLEEP=0.25
+```
+
+Export collected data to CSV for analysis:
+
+```bash
+poetry run python -m app.export_data --out .\exports
+```
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
