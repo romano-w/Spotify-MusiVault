@@ -6,15 +6,15 @@ Systematically collects and stores all Spotify data with proper error handling a
 import time
 from typing import Dict, List, Optional
 from datetime import datetime
-from data_access import SpotifyDataStorage
-from spotify_api_services import (
+from app.data_access import SpotifyDataStorage
+from app.spotify_api_services import (
     get_user, get_user_playlists, get_playlist, get_playlist_items,
     get_saved_tracks, get_user_top_items, get_followed_artists,
     get_several_audio_features, get_track_audio_features, get_track_audio_analysis
 )
-from retry_utils import retry_request
-from database import db_session
-from models import Track, AudioFeatures
+from app.retry_utils import retry_request
+from app.database import db_session
+from app.models import Track, AudioFeatures
 import os
 
 class SpotifyDataCollector:

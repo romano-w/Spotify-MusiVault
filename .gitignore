@@ -6,6 +6,10 @@ instance/*
 !instance/.gitignore
 .webassets-cache
 .env
+spotify_data.db
+exports/
+.vscode/
+.idea/
 
 ### Flask.Python Stack ###
 # Byte-compiled / optimized / DLL files
@@ -60,6 +64,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+.coverage
+.coverage.*
 
 # Translations
 *.mo

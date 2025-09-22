@@ -307,6 +307,14 @@ Export collected data to CSV for analysis:
 poetry run python -m app.export_data --out .\exports
 ```
 
+### Development
+
+- Run tests: `poetry run pytest`
+- Lint: `poetry run ruff check .`
+- Format: `poetry run black .`
+
+Utility scripts have moved to `scripts/` (for example: `scripts/generate_secret.py`).
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
