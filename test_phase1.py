@@ -5,12 +5,13 @@ Simple database test to verify Phase 1 completion.
 import sys
 import os
 
-# Add the app directory to the Python path
-app_dir = os.path.join(os.path.dirname(__file__), 'app')
-sys.path.insert(0, app_dir)
+# Ensure the project root is on the Python path for package imports
+project_root = os.path.dirname(__file__)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
-from database import db_session
-from models import User, Artist, Album, Track, Playlist, AudioFeatures
+from app.database import db_session
+from app.models import User, Artist, Album, Track, Playlist, AudioFeatures
 
 def test_basic_operations():
     """Test basic database operations."""

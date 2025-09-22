@@ -8,13 +8,13 @@ from datetime import datetime
 from typing import Dict, List, Optional, Union
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from models import (
+from app.models import (
     User, Artist, Album, Track, Playlist, AudioFeatures, AudioAnalysis,
     SavedTrack, UserTopTrack, UserTopArtist,
     playlist_track_association, track_artist_association, album_artist_association,
     user_followed_artists_association
 )
-from database import db_session
+from app.database import db_session
 
 class SpotifyDataStorage:
     """Enhanced data storage operations for Spotify entities with batch processing."""
