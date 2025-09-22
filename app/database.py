@@ -13,6 +13,9 @@ class DatabaseManager:
     
     def __init__(self, database_url=None):
         if database_url is None:
+            database_url = os.getenv('DATABASE_URL')
+
+        if database_url is None:
             # Default to SQLite database in the project root
             db_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'spotify_data.db')
             database_url = f'sqlite:///{db_path}'

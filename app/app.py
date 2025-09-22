@@ -1,19 +1,21 @@
 import os
 import time
+from typing import Optional
 
 import spotipy
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
 
 from flask import Flask, redirect, request, session, url_for
-from spotify_api_services import (
-    get_user, get_user_playlists, get_playlist, get_playlist_items,
-    get_playlist_cover_image, get_track, get_several_tracks, get_saved_tracks,
-    get_several_audio_features, get_track_audio_features,
-    get_track_audio_analysis, get_user_top_items, get_followed_artists,
-)
-from .spotify_utils import (
-    print_playlist_structure, print_playlist_items_structure, print_cover_image_structure, print_structure
+from .spotify_api_services import (
+    get_saved_tracks,
+    get_several_audio_features,
+    get_track_audio_analysis,
+    get_track_audio_features,
+    get_user,
+    get_user_playlists,
+    get_user_top_items,
+    get_playlist_items,
 )
 from .database import init_database, db_session
 from .models import User
@@ -72,11 +74,10 @@ def authorize():
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    # Fetch and print all Spotify data
-    fetch_and_print_spotify_data(sp)
+    user_id = sync_spotify_data(sp)
+    session['current_user_id'] = user_id
 
-    profile = sp.current_user()
-    return 'Logged in as ' + profile['id']
+    return {'status': 'synchronized', 'user_id': user_id}
 
 # @app.route('/authorize')
 # def authorize():
@@ -102,81 +103,108 @@ def authorize():
 #     # Do something with the profile, e.g., store in session or database
 #     return 'Logged in as ' + profile['id']
 
+def _current_user_id() -> Optional[str]:
+    return session.get('current_user_id')
+
+
 @app.route('/user')
 def user():
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    user_info = get_user(sp)
-    return user_info
+    user_info = SpotifyDataAccess.get_user(user_id)
+    if not user_info:
+        return {'error': 'User not found'}, 404
+    return {'user': user_info}
+
 
 @app.route('/user/playlists')
 def user_playlists():
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    playlists = get_user_playlists(sp)
-    return {"playlists": playlists}
+    playlists = SpotifyDataAccess.get_user_playlists(user_id)
+    return {'playlists': playlists}
+
 
 @app.route('/playlist/<playlist_id>')
 def playlist(playlist_id):
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    playlist_info = get_playlist(sp, playlist_id)
+    playlist_info = SpotifyDataAccess.get_playlist(playlist_id)
+    if not playlist_info:
+        return {'error': 'Playlist not found'}, 404
+    if playlist_info.get('owner_id') != user_id:
+        return {'error': 'Playlist not accessible'}, 403
     return playlist_info
+
 
 @app.route('/playlist/<playlist_id>/items')
 def playlist_items(playlist_id):
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    items = get_playlist_items(sp, playlist_id)
-    return {"items": items}
+    playlist_info = SpotifyDataAccess.get_playlist(playlist_id)
+    if not playlist_info:
+        return {'error': 'Playlist not found'}, 404
+    if playlist_info.get('owner_id') != user_id:
+        return {'error': 'Playlist not accessible'}, 403
+    return {'items': playlist_info.get('tracks', [])}
+
 
 @app.route('/playlist/<playlist_id>/cover')
 def playlist_cover(playlist_id):
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    cover_image = get_playlist_cover_image(sp, playlist_id)
-    return {"cover_image": cover_image}
+    playlist_info = SpotifyDataAccess.get_playlist(playlist_id)
+    if not playlist_info:
+        return {'error': 'Playlist not found'}, 404
+    if playlist_info.get('owner_id') != user_id:
+        return {'error': 'Playlist not accessible'}, 403
+    return {'images': playlist_info.get('images', [])}
+
 
 @app.route('/track/<track_id>')
 def track(track_id):
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    track_info = get_track(sp, track_id)
+    track_info = SpotifyDataAccess.get_track(track_id)
+    if not track_info:
+        return {'error': 'Track not found'}, 404
     return track_info
+
 
 @app.route('/tracks')
 def several_tracks():
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    # Assuming track IDs are passed as query parameters
     track_ids = request.args.getlist('ids')
-    tracks_info = get_several_tracks(sp, track_ids)
-    return {"tracks": tracks_info}
+    tracks_info = SpotifyDataAccess.get_tracks(track_ids)
+    return {'tracks': tracks_info}
+
 
 @app.route('/user/saved_tracks')
 def saved_tracks():
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    tracks = get_saved_tracks(sp)
-    return {"saved_tracks": tracks}
+    tracks = SpotifyDataAccess.get_saved_tracks(user_id)
+    return {'saved_tracks': tracks}
+
 
 @app.route('/audio_features')
 def audio_features():
     sp = create_spotify_client()
     if sp is None:
         return redirect(url_for('login'))
-    # Assuming track IDs are passed as query parameters
     track_ids = request.args.getlist('ids')
     features = get_several_audio_features(sp, track_ids)
-    return {"audio_features": features}
+    return {'audio_features': features}
+
 
 @app.route('/track/<track_id>/audio_features')
 def track_audio_features(track_id):
@@ -184,7 +212,8 @@ def track_audio_features(track_id):
     if sp is None:
         return redirect(url_for('login'))
     features = get_track_audio_features(sp, track_id)
-    return {"audio_features": features}
+    return {'audio_features': features}
+
 
 @app.route('/track/<track_id>/audio_analysis')
 def track_audio_analysis(track_id):
@@ -194,21 +223,29 @@ def track_audio_analysis(track_id):
     analysis = get_track_audio_analysis(sp, track_id)
     return analysis
 
+
 @app.route('/user/top/<type>')
 def user_top_items(type):
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    top_items = get_user_top_items(sp, type)
-    return {"top_items": top_items}
+    time_range = request.args.get('time_range')
+    if type == 'tracks':
+        top_items = SpotifyDataAccess.get_user_top_tracks(user_id, time_range)
+    elif type == 'artists':
+        top_items = SpotifyDataAccess.get_user_top_artists(user_id, time_range)
+    else:
+        return {'error': 'Invalid type'}, 400
+    return {'top_items': top_items}
+
 
 @app.route('/user/followed_artists')
 def followed_artists():
-    sp = create_spotify_client()
-    if sp is None:
+    user_id = _current_user_id()
+    if not user_id:
         return redirect(url_for('login'))
-    artists = get_followed_artists(sp)
-    return {"followed_artists": artists}
+    # Followed artists are not yet persisted locally.
+    return {'followed_artists': []}
 
 def create_spotify_client():
     token_info = session.get('spotify_token')
@@ -249,70 +286,29 @@ def create_spotify_client():
 
     return spotipy.Spotify(auth=access_token)
 
-def fetch_and_print_spotify_data(sp):
-    # User Profile
+def sync_spotify_data(sp):
+    """Fetch data from Spotify and persist it to the local database."""
+
     user_info = get_user(sp)
-    print("User Info:", user_info)
-    # Prints: 
-    # User Info: {'display_name': 'mlgprettyboi', 'external_urls': 
-    # {'spotify': 'https://open.spotify.com/user/mlgprettyboi'}, 'href': 
-    # 'https://api.spotify.com/v1/users/mlgprettyboi', 'id': 'mlgprettyboi', 
-    # 'images': [], 'type': 'user', 'uri': 'spotify:user:mlgprettyboi', 
-    # 'followers': {'href': None, 'total': 3}}
+    playlists_payload = []
+    for playlist in get_user_playlists(sp):
+        playlist_id = playlist.get('id')
+        if not playlist_id:
+            continue
+        items = get_playlist_items(sp, playlist_id)
+        playlists_payload.append({'playlist': playlist, 'items': items})
 
-    # # User's Playlists
-    # playlists = get_user_playlists(sp)
-    # print("\nUser's Playlists:")
-    # for playlist in playlists:
-    #     print(playlist['name'])
-
-        # # Playlist Details
-        # playlist_detail = get_playlist(sp, playlist['id'])
-        # print("  Detail:")
-        # print_playlist_structure(playlist_detail)
-
-        # print("  Detail:", playlist_detail)
-
-        # # Playlist Items
-        # playlist_items = get_playlist_items(sp, playlist['id'])
-        # print("  Items:", playlist_items)
-
-        # # Open a file in write mode
-        # with open('playlist_items_structure.txt', 'w') as f:
-        #     # Call the function with the file parameter
-        #     print_playlist_items_structure(playlist_items, file=f)
-
-        # # Playlist Cover Image
-        # cover_image = get_playlist_cover_image(sp, playlist['id'])
-        # print_cover_image_structure(cover_image)
-        # # print("  Cover Image:", cover_image)
-
-    # # User's Saved Tracks
-    # saved_tracks = get_saved_tracks(sp)
-    # print(type("\nSaved Tracks: {saved_tracks}"))
-    # print(saved_tracks)
-
-    # User's Top Items (Tracks and Artists)
+    saved_tracks = get_saved_tracks(sp)
     top_tracks = get_user_top_items(sp, 'tracks')
-    # print("\nTop Tracks:", top_tracks)
-    print_structure(top_tracks)
-    # top_artists = get_user_top_items(sp, 'artists')
-    # print("\nTop Artists:", top_artists)
+    top_artists = get_user_top_items(sp, 'artists')
 
-    # # Followed Artists
-    # followed_artists = get_followed_artists(sp)
-    # print("\nFollowed Artists:", followed_artists)
-
-    # # Fetching track details, audio features, and audio analysis for a few tracks
-    # # Assuming you have some track IDs
-    # sample_track_ids = ['track_id1', 'track_id2']
-    # tracks = get_several_tracks(sp, sample_track_ids)
-    # print("\nTracks Details:", tracks)
-    # for track_id in sample_track_ids:
-    #     track_audio_features = get_track_audio_features(sp, track_id)
-    #     print(f"\nAudio Features for {track_id}:", track_audio_features)
-    #     track_audio_analysis = get_track_audio_analysis(sp, track_id)
-    #     print(f"\nAudio Analysis for {track_id}:", track_audio_analysis)
+    return SpotifyDataAccess.store_user_snapshot(
+        user_info,
+        playlists=playlists_payload,
+        saved_tracks=saved_tracks,
+        top_tracks=top_tracks,
+        top_artists=top_artists,
+    )
 
 @app.route('/db-test')
 def test_database():
