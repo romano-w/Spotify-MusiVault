@@ -3,18 +3,18 @@ import spotipy
 from dotenv import load_dotenv
 from authlib.integrations.flask_client import OAuth
 from flask import Flask, redirect, request, url_for
-from spotify_api_services import (
+from .spotify_api_services import (
     get_user, get_user_playlists, get_playlist, get_playlist_items,
     get_playlist_cover_image, get_track, get_several_tracks, get_saved_tracks,
     get_several_audio_features, get_track_audio_features,
     get_track_audio_analysis, get_user_top_items, get_followed_artists,
 )
-from spotify_utils import (
+from .spotify_utils import (
     print_playlist_structure, print_playlist_items_structure, print_cover_image_structure, print_structure
 )
-from database import init_database, db_session
-from models import User
-from data_access import SpotifyDataAccess
+from .database import init_database, db_session
+from .models import User
+from .data_access import SpotifyDataAccess
 
 # Load environment variables from .env file
 load_dotenv()
