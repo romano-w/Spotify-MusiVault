@@ -294,3 +294,16 @@ poetry run python app/app.py
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+## Developing on Windows 11
+
+The repository is validated in continuous integration with Poetry and pytest, so mirroring that toolchain locally keeps behaviour consistent. A few tips for a smooth setup on Windows 11:
+
+1. **Use WSL2 for native-like tooling** – enable Windows Subsystem for Linux with `wsl --install`, then open the Ubuntu (or preferred distro) terminal to clone this project. Keeping the working tree inside the Linux filesystem (e.g., `/home/<user>/projects`) avoids path-mapping issues with SQLite files.
+2. **Install Poetry inside WSL** – run `pipx install poetry`, then `poetry install --no-root` to create the same virtual environment CI uses. Poetry creates an in-project `.venv`, so Visual Studio Code automatically detects it when opened from WSL.
+3. **Sync environment variables** – copy `.env` secrets into the WSL environment or configure them through `export` commands before launching the Flask app. When running the test suite you only need placeholder values, matching the defaults used in `tests/conftest.py`.
+4. **Run the test suite with CI parity** – execute `poetry run pytest -q` to ensure the database fixtures and Spotipy fakes behave exactly as they do in GitHub Actions.
+5. **Optional Docker workflow** – if you prefer containers, install Docker Desktop with WSL integration enabled, then build and run images from within WSL so volume paths stay POSIX-compatible.
+
+Following this flow keeps dependencies aligned with CI and avoids Windows path quirks that can appear when SQLite files live on NTFS mounts.
+
