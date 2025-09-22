@@ -6,7 +6,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from contextlib import contextmanager
-from .models import Base
+from app.models import Base
 
 class DatabaseManager:
     """Manages database connections and sessions."""
